@@ -14,5 +14,6 @@ def hostname():
 if __name__ == '__main__':
     hostnameget = hostname()
     print hostnameget
+    print 'rm'
 
     
