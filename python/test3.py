@@ -16,14 +16,19 @@ sys.stdout = FlushFile(sys.__stdout__)
 def command_return(command_from_client):
 
     popen = subprocess.Popen([command_from_client], shell = True, stdout = subprocess.PIPE)
+    output = ''
     while True:
         next_line = popen.stdout.readline()
         if next_line == '' and popen.poll() != None:
             break
-        print next_line,
+        return next_line
+        #print next_line,
+        #output += next_line
+    #return output
 
 
 if __name__ == '__main__':
     while True:
         input = raw_input("请输入指令：")
-        command_return(input)
+        print command_return(input)
+
