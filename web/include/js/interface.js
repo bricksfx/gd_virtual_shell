@@ -2,6 +2,7 @@
 $(function(){
     AddMessageBox("Welcome to use the virtual shell");
     AddMessageBox("(C) SUT-ACM 2014-2015 *Chen & Bricks");
+    AddMessageBox("USE $vs:help to get more information");
     AddCommandBox();
     $("input:last").focus();
 })
@@ -24,4 +25,4 @@ $(function(){
             $("input:last").focus();
         }
     })
-})
+ })

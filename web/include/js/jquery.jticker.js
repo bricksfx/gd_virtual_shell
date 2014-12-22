@@ -229,7 +229,7 @@ jQuery.fn[name].defaults = {
 
   jQuery(document).ready(function(){
     // Instantiate jTicker 
-	jQuery("#ticker").ticker({
+	jQuery(".ticker").ticker({
  		cursorList:  " ",
  		rate:        100,
  		delay:       4000
@@ -237,17 +237,17 @@ jQuery.fn[name].defaults = {
 
     // Trigger events 
     jQuery(".stop").click(function(){
-        jQuery("#ticker").trigger("stop");
+        jQuery(".ticker").trigger("stop");
         return false;
     });
     
     jQuery(".play").click(function(){
-        jQuery("#ticker").trigger("play");
+        jQuery(".ticker").trigger("play");
         return false;
     });
     
     jQuery(".speedup").click(function(){
-        jQuery("#ticker")
+        jQuery(".ticker")
         .trigger({
             type: "control",
             item: 0,
@@ -258,7 +258,7 @@ jQuery.fn[name].defaults = {
     });
     
     jQuery(".slowdown").click(function(){
-        jQuery("#ticker")
+        jQuery(".ticker")
         .trigger({
             type: "control",
             item: 0,
@@ -269,17 +269,17 @@ jQuery.fn[name].defaults = {
     });
     
     jQuery(".next").live("click", function(){
-        jQuery("#ticker")
+        jQuery(".ticker")
         .trigger({type: "play"})
         .trigger({type: "stop"});
         return false;
     });
 
     jQuery(".style").click(function(){
-        jQuery("#ticker")
+        jQuery(".ticker")
         .trigger({
             type: "control",
-            cursor: jQuery("#ticker").data("ticker").cursor.css({width: "4em", background: "#efefef", position: "relative", top: "1em", left: "-1em"})
+            cursor: jQuery(".ticker").data("ticker").cursor.css({width: "4em", background: "#efefef", position: "relative", top: "1em", left: "-1em"})
         })
         return false;
     });
