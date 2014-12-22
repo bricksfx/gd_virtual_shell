@@ -9,7 +9,7 @@ function AddMessageBox(){
 function AddTickerMessageBox(){
     var data = arguments[0] ? arguments[0] : "";
     var color = arguments[1] ? arguments[1] : "white";
-    $("#main").append("<br/><div class=\"message_box\" id=\"ticker\" style=\"color:" + color + "\">" + data + "</div>");
+    $("#main").append("<br/><div class=\"message_box ticker\" style=\"color:" + color + "\">" + data + "</div>");
 }
 
 //动态添加命令输入部分
@@ -17,26 +17,24 @@ function AddCommandBox(){
     if (undefined != $.LS.get("user")){
         user_name = $.LS.get("user_name");
     } else {
-//        user_name = "GUEST:";
-        user_name = "lin@lin-SUTACM:~$";
+        user_name = "GUEST:$";
+//        user_name = "lin@lin-SUTACM:~$";
     }
     
-    $("#main").append("<br/><div class=\"command_box\"><div class=\"user_name\"><a>" + user_name + "</a></div><div class=\"command_area\"><input type=\"text\" name=\"command\"></div></div>");
+    $("#main").append("<br/><div class=\"command_box\"><div class=\"command_title\"><a>" + user_name + "</a></div><div class=\"command_area\"><input type=\"text\" name=\"command\"></div></div>");
 }
 
-function AddCommandBox(){
-    if (undefined != $.LS.get("user")){
-        user_name = $.LS.get("user_name");
-    } else {
-//        user_name = "GUEST:";
-        user_name = "lin@lin-SUTACM:~$";
-    }
-    
-    $("#main").append("<br/><div class=\"command_box\"><div class=\"user_name\"><a>" + user_name + "</a></div><div class=\"command_area\"><input type=\"text\" name=\"command\"></div></div>");
+//动态添加命令输入部分
+function AddAnyCommandBox(){
+    var title = arguments[0] ? arguments[0] : "";
+    var command_function = arguments[0] ? arguments[0] : "";
+    $("#main").append("<br/><div class=\"command_box\"><div class=\"command_title\" id=\"" + title + "\"><a>" + title + "</a></div><div class=\"command_area\"><input type=\"text\" func=\"" + command_function + "\" name=\"command\"></div></div>");
 }
+
 
 //处理写命令
 function ShellCommand(command){
+    command = $.trim(command);
     var shellcommand = new Array();
     shellcommand = command.split(":");
     switch (shellcommand[0]){
@@ -44,7 +42,7 @@ function ShellCommand(command){
         case "$vs":
             switch (shellcommand[1]){
                 //清除屏幕
-                case "clean":
+                case "clear":
                     $("#main").empty();
                     AddCommandBox();
                     break;              
@@ -79,7 +77,7 @@ function ShellCommand(command){
                     
                 //显示VirtualShell指令集
                 case "help":
-                    AddCommandBox();
+                    AddTickerMessageBox("Welcome to use Virtual Shell", "red");
                     break;
                     
                 //显示作者信息
@@ -91,10 +89,14 @@ function ShellCommand(command){
                 //用户登录
                 case "login":
                     $("#main").empty();
-                    if (undefined != $.LS.get("user_name")){
-                        
-                    }
+                    AddAnyCommandBox("login_user_name");
+                    if (undefined != $.LS.get("user_name")){                        
+                        $("#login_user_name").val($.LS.get("user_name"));
+                    }                    
+                    break;
                     
+                //和其他管理员对话
+                case "message":
                     break;
             }
             break;

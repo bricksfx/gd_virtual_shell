@@ -25,7 +25,7 @@ body{
     margin-top:4px;
 }
 
-.command_box .user_name{
+.command_box .command_title{
     position: relative;
     float: left;
 }
