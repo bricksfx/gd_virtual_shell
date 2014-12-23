@@ -1,5 +1,5 @@
 //已登录标示符
-var logined = 1;
+var logined = 0;
 
 //动态添加消息
 function AddMessageBox() {
@@ -98,6 +98,8 @@ function ShellCommand(command) {
                     if (undefined != $.LS.get("user_name")) {
                         $("#login_user_name").val($.LS.get("user_name"));
                     }
+                    
+                    AddAnyCommandBox("Login:", "UserName");
                     break;
 
                     //和其他管理员对话
@@ -132,9 +134,8 @@ if (undefined != $.LS.get("command_stack")) {
 //获取上命令
 //direction = 38; 向上
 //direction = 40; 向下
-function CommandHistory(direction) {    
+function CommandHistory(direction) {
     switch (direction) {
-        
         case 38:
             if (now_command > 0) {
                 $("input:last").val(command_array[now_command--]);
@@ -147,6 +148,23 @@ function CommandHistory(direction) {
             }
             break;
     }
-
 }
 
+//用户登录
+function UserName(){
+    user_name = $("input:last").val();
+    $.LS.set("user_name", user_name);
+    AddAnyCommandBox("Password:", "UserPassword");
+}
+
+function UserPassword(){
+    if (undefined != $.LS.get("user_name")){
+        user_name = $.LS.get("user_name");
+        ws.send('{"type":"login","user_name":"' + user_name + '", "password":"' + $("input:last").val() + '", "group":"VirtualShell"}');
+    } else {
+        AddMessageBox("Undefined User Name", "red");
+        AddMessageBox("Access Deined", "red");
+        AddCommandBox();
+        return ;
+    }
+}

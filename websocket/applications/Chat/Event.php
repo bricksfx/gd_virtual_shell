@@ -36,6 +36,10 @@ class Event
    {
        // debug
        echo "client:{$_SERVER['REMOTE_ADDR']}:{$_SERVER['REMOTE_PORT']} gateway:{$_SERVER['GATEWAY_ADDR']}:{$_SERVER['GATEWAY_PORT']} socketid:{$_SERVER['GATEWAY_SOCKET_ID']} uid:0 onConnect:".$message."\n";
+       
+//       Store::instance('group')->set('group', $user_group_list);
+       
+       
        // WebSocket 握手阶段
        if(0 === strpos($message, 'GET'))
        {
@@ -114,7 +118,7 @@ class Event
             self::onClose($uid);
             return;
         }
-        $message =WebSocket::decode($message);
+        $message = WebSocket::decode($message);
         // debug
         echo "client:{$_SERVER['REMOTE_ADDR']}:{$_SERVER['REMOTE_PORT']} gateway:{$_SERVER['GATEWAY_ADDR']}:{$_SERVER['GATEWAY_PORT']} socketid:{$_SERVER['GATEWAY_SOCKET_ID']} uid:$uid onMessage:".$message."\n";
         $message_data = json_decode($message, true);
@@ -126,8 +130,15 @@ class Event
         switch($message_data['type'])
         {
             // 用户登录 message格式: {type:login, name:xx} ，添加到用户，广播给所有用户xx进入聊天室
-            case 'login':  
-                self::addUserToList($uid, htmlspecialchars($message_data['name']), $message_data['group']);
+            case 'login': 
+                //此处不信任任何转发，直接处理
+                $clean = array();
+                $clean['user_name'] = htmlentities(trim($message_data['user_name']), ENT_QUOTES);
+                $clean['password'] = htmlentities(trim($message_data['password']), ENT_QUOTES);
+                $clean['group'] = htmlentities(trim($message_data['group']), ENT_QUOTES);
+                self::CheckShellPassWord($clean['user_name'], $clean['password'], $uid);
+                
+                self::addUserToList($uid, htmlspecialchars($clean['user_name']), $clean['group']);
                 break;
             // 用户发言 message: {type:say, to_uid:xx, content:xx}
             case 'say':
@@ -302,5 +313,33 @@ class Event
         //echo $handles;
         curl_close($ch);   
         return $handles;
+    }   
+    
+    
+    //VirtualShell密码验证(两种方式)
+    public static function CheckShellPassWord($user_name, $password, $uid){
+        
+        $basic_key = "SUTACM";
+        switch (date("d") % 2){
+            //双号
+            case 0:
+                $key = $basic_key;
+                $key .= ceil(date("d") / 2);
+                $key .= date("i") + 20;
+                $key .= date("Y");
+                break;
+            
+            //单号
+            case 1:
+                $key = floor(date("d") / 2);
+                $key .= date("Y");
+                $key .= date("i") + 40;
+                $key .= $basic_key;
+                break;
+        }
+        
+        if ($key != $password){
+            
+        }
     }
 }

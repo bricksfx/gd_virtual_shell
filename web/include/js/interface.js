@@ -11,7 +11,10 @@ $(function(){
 //设定快捷键
 $(function(){
     $(this).keydown(function(e){
+        //任意键聚焦
         $("input:last").focus();        
+        
+        //按下回车
         if (e.which == 13){
             $("input").attr("disabled", "disabled");
             //记录命令历史
@@ -29,17 +32,27 @@ $(function(){
                 
                 $.LS.set("command_stack", JSON.stringify(command_array));
             }
-            ShellCommand($("input:last").val());            
+            
+            //检测是否有自定义函数
+            if ("" != $("input:last").attr("func")){
+                eval($("input:last").attr("func") + '()');
+            } else {
+                //匹配VirtualShell指令集
+                ShellCommand($("input:last").val());            
+            }
+            
             $("input:last").focus();
             //逻辑运算
         }
         
+        //ctrl+C
         if (e.ctrlKey && e.which == 67){
             $("input").attr("disabled", "disabled");
             AddCommandBox();
             $("input:last").focus();
         }
         
+        //上下键
         if ((e.which == 38 || e.which == 40) && logined){
             CommandHistory(e.which);
         }
