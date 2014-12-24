@@ -13,7 +13,6 @@ $(function(){
     $(this).keydown(function(e){
         //任意键聚焦
         $("input:last").focus();        
-        
         //按下回车
         if (e.which == 13){
             $("input").attr("disabled", "disabled");
@@ -34,9 +33,9 @@ $(function(){
             }
             
             //检测是否有自定义函数
-            if ("" != $("input:last").attr("func")){
+            if ('' !== $("input:last").attr("func") && undefined != $("input:last").attr("func")){     
                 eval($("input:last").attr("func") + '()');
-            } else {
+            } else {                
                 //匹配VirtualShell指令集
                 ShellCommand($("input:last").val());            
             }
