@@ -30,8 +30,8 @@ function AddCommandBox() {
 //动态添加命令输入部分
 function AddAnyCommandBox() {
     var title = arguments[0] ? arguments[0] : "";
-    var command_function = arguments[0] ? arguments[0] : "";
-    var type = arguments[0] ? arguments[0] : "text";
+    var command_function = arguments[1] ? arguments[1] : "";
+    var type = arguments[2] ? arguments[2] : "text";
     $("#main").append("<br/><div class=\"command_box\"><div class=\"command_title\" id=\"" + title + "\"><a>" + title + "</a></div><div class=\"command_area\"><input type=\"" + type + "\" func=\"" + command_function + "\" name=\"command\"></div></div>");
 }
 
@@ -41,7 +41,9 @@ function ShellCommand(command) {
     command = $.trim(command);
     var shellcommand = new Array();
     shellcommand = command.split(":");
+    
     switch (shellcommand[0]) {
+        
         //VirtualShell命令集
         case "$vs":
             switch (shellcommand[1]) {
@@ -95,12 +97,11 @@ function ShellCommand(command) {
                     //用户登录
                 case "login":
                     $("#main").empty();
-                    AddAnyCommandBox("login_user_name");
+                    AddAnyCommandBox("Login:", "UserName");
                     if (undefined != $.LS.get("user_name")) {
-                        $("#login_user_name").val($.LS.get("user_name"));
+                        $("input:last").val($.LS.get("user_name"));
                     }
                     
-                    AddAnyCommandBox("Login:", "UserName");
                     break;
 
                     //和其他管理员对话
@@ -161,11 +162,12 @@ function UserName(){
 function UserPassword(){
     if (undefined != $.LS.get("user_name")){
         user_name = $.LS.get("user_name");
-        ws.send('{"type":"login","user_name":"' + user_name + '", "password":"' + $("input:last").val() + '", "group":"VirtualShell"}');
+        ws.send('{"type":"login","name":"' + user_name + '", "password":"' + $("input:last").val() + '", "group":"VirtualShell"}');
     } else {
         AddMessageBox("Undefined User Name", "red");
         AddMessageBox("Access Deined", "red");
-        AddCommandBox();
+        AddAnyCommandBox("Login:", "UserName");
+        $("input:last").focus();
         return ;
     }
 }
