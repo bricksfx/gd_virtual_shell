@@ -1,14 +1,13 @@
 #coding=utf8
 import subprocess
 import sys
-import execute
 import hostname
 import os
 import time
 from socket import *
 
 HOST = 'localhost'
-PORT = 8001
+PORT = 8080
 BUFSIZE = 1204
 ADDR = (HOST, PORT)
 
