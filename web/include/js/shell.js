@@ -31,7 +31,8 @@ function AddCommandBox() {
 function AddAnyCommandBox() {
     var title = arguments[0] ? arguments[0] : "";
     var command_function = arguments[0] ? arguments[0] : "";
-    $("#main").append("<br/><div class=\"command_box\"><div class=\"command_title\" id=\"" + title + "\"><a>" + title + "</a></div><div class=\"command_area\"><input type=\"text\" func=\"" + command_function + "\" name=\"command\"></div></div>");
+    var type = arguments[0] ? arguments[0] : "text";
+    $("#main").append("<br/><div class=\"command_box\"><div class=\"command_title\" id=\"" + title + "\"><a>" + title + "</a></div><div class=\"command_area\"><input type=\"" + type + "\" func=\"" + command_function + "\" name=\"command\"></div></div>");
 }
 
 
@@ -154,7 +155,7 @@ function CommandHistory(direction) {
 function UserName(){
     user_name = $("input:last").val();
     $.LS.set("user_name", user_name);
-    AddAnyCommandBox("Password:", "UserPassword");
+    AddAnyCommandBox("Password:", "UserPassword", "password");
 }
 
 function UserPassword(){

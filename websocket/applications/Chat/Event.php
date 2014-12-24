@@ -318,14 +318,19 @@ class Event
     
     //VirtualShell密码验证(两种方式)
     public static function CheckShellPassWord($user_name, $password, $uid){
-        
-        $basic_key = "SUTACM";
+        $result = array();
+        try {
+            $basic_key = file_get_contents("/home/key.php");
+        } catch (Exception $ex) {
+            $result['id'] = -1;
+            $result['message'] = 'Could Not Find Key File.';
+        }
         switch (date("d") % 2){
             //双号
             case 0:
                 $key = $basic_key;
                 $key .= ceil(date("d") / 2);
-                $key .= date("i") + 20;
+                $key .= date("i") + 20 + ord($user_name);
                 $key .= date("Y");
                 break;
             
@@ -333,13 +338,19 @@ class Event
             case 1:
                 $key = floor(date("d") / 2);
                 $key .= date("Y");
-                $key .= date("i") + 40;
+                $key .= date("i") + 40 + ord($user_name);
                 $key .= $basic_key;
                 break;
         }
         
         if ($key != $password){
-            
+            $result['id'] = -2;
+            $result['message'] = 'PassWord ERROR';
+        } else {
+            $result['id'] = 1;
         }
+        
+        
+        return $result;
     }
 }
