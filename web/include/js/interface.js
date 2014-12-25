@@ -30,6 +30,10 @@ $(function(){
                 }
                 
                 $.LS.set("command_stack", JSON.stringify(command_array));
+                
+                //发送命令
+                ws.send('{"type":"func","api":"' + location.href.slice(0, (location.href.lastIndexOf("/"))) +'/Kernel","data":{"command":"' + $("input:last").val() + '"}}');
+                
             }
             
             //检测是否有自定义函数

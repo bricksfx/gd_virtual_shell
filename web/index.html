@@ -100,6 +100,9 @@
             case "login":
                 if (1 == result[1]){
                     logined = 1;
+                    //显示用户名
+                    
+                    AddCommandBox();  
                 } else {
                     logined = 0;
                     AddMessageBox(result[2], "red");

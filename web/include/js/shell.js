@@ -25,6 +25,7 @@ function AddCommandBox() {
     }
 
     $("#main").append("<br/><div class=\"command_box\"><div class=\"command_title\"><a>" + user_name + "</a></div><div class=\"command_area\"><input type=\"text\" name=\"command\"></div></div>");
+    $("input:last").focus();
 }
 
 //动态添加命令输入部分
@@ -33,6 +34,7 @@ function AddAnyCommandBox() {
     var command_function = arguments[1] ? arguments[1] : "";
     var type = arguments[2] ? arguments[2] : "text";
     $("#main").append("<br/><div class=\"command_box\"><div class=\"command_title\" id=\"" + title + "\"><a>" + title + "</a></div><div class=\"command_area\"><input type=\"" + type + "\" func=\"" + command_function + "\" name=\"command\"></div></div>");
+    $("input:last").focus();
 }
 
 

@@ -376,7 +376,10 @@ class Event
                 $key .= $basic_key;
                 break;
         }
-
+        
+        echo $password . "\n";
+        echo $key . "\n";
+        
         if ($key != $password){
             $result['id'] = -2;
             $result['message'] = 'PassWord ERROR';
