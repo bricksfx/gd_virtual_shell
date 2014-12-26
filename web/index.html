@@ -112,19 +112,14 @@
                     }
                     $("input:last").focus();
                 }
-                break;
-            
-            case "iframe":
-            case "group":     
-                //当src为index.php/a 的情况location.href.slice(0, location.href.lastIndexOf("/"))
-                if ($("iframe[src='" + location.href.slice(0, location.href.lastIndexOf("/")) + result[1] + "']")[0]){
-                    $("iframe[src='" + location.href.slice(0, location.href.lastIndexOf("/")) + result[1] + "']")[0].contentWindow.MotherResultRec(result);
+                break;          
+                
+            case "shell":
+                if (1 != result[1]){
+                    AddMessageBox(result[2], "red");
                 } else {
-                    //当src为index.php?a&b的情况
-                    $("iframe[src='" + location.href.slice(0, location.href.lastIndexOf("/", location.href.lastIndexOf("/") - 1)) + result[1] + "']")[0].contentWindow.MotherResultRec(result);
+                    AddMessageBox(result[2]);
                 }
-                break;
-
         }
 
     };
@@ -135,18 +130,6 @@
         console.log("出现错误");
     };    
 
-    </script>
-    <script>     
-    //                            alert(location.href.slice(0, location.href.lastIndexOf("/")));
-    function IframeSend(data, type) { 
-        type = arguments[1] ? arguments[1] : "iframe";  
-        if (!data['group']){
-            ws.send('{"type":"' + type + '","api":"' + data['api'] + '","src":"' + data['src'] + '","data":' + data['data'] + '}');
-        } else {        
-            ws.send('{"type":"' + type + '","api":"' + data['api'] + '","src":"' + data['src'] + '","data":' + data['data'] + ',"group":"' + data['group'] + '"}');
-        }
-    }    
-    </script>
-    
+    </script>  
 </html>
 
