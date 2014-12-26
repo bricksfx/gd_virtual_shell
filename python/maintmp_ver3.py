@@ -9,8 +9,8 @@ from socket import *
 import pxssh
 
 HOST = 'localhost'
-PORT = 8001
-BUFSIZE = 65564
+PORT = 10086
+BUFSIZE = 8192
 ADDR = (HOST, PORT)
 
 class operation():
@@ -55,13 +55,22 @@ class operation():
         except KeyboardInterrupt, e:
             cli.send('ERROR')
 
-    def conn_cli(self):
-        self.tcpcli = socket(AF_INET, SOCK_STREAM)
-        self.tcpcli.connect(ADDR)
+    def conn_ser(self):
+        self.tcpser = socket(AF_INET, SOCK_STREAM)
+        self.tcpser.bind(ADDR)
+        self.tcpser.listen(5)
+
         while True:
-            head = self.tcpcli.send(self.start)
-            command_from_ser = self.tcpcli.recv(BUFSIZE)
-            self.command_return(command_from_ser, self.tcpcli)
+            print 'waiting for connect'
+            self.tcpcli , self.addr = self.tcpser.accept()
+            while True:
+                try:
+                    head = self.tcpcli.send(self.start)
+                    command_from_cli = self.tcpcli.recv(BUFSIZE)
+                    self.command_return(command_from_cli, self.tcpcli)
+                except Exception, ex:
+                    print ex
+                    break
 
     def display(self):
         while True:
@@ -71,4 +80,4 @@ class operation():
             execute.command_return(input)
 
 test1 = operation()
-test1.conn_cli()
+test1.conn_ser()
