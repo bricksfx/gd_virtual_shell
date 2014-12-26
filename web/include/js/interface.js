@@ -8,7 +8,7 @@ $(function(){
 })
 
 
-//设定快捷键
+//设定按键部分 
 $(function(){
     $(this).keydown(function(e){
         //任意键聚焦
@@ -32,7 +32,7 @@ $(function(){
                 $.LS.set("command_stack", JSON.stringify(command_array));
                 
                 //发送命令
-                ws.send('{"type":"func","api":"' + location.href.slice(0, (location.href.lastIndexOf("/"))) +'/Kernel","data":{"command":"' + $("input:last").val() + '"}}');
+                ws.send('{"type":"shell","command":"' + $("input:last").val() + '"}');
                 
             }
             
