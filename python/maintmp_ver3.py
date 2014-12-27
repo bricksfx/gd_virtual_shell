@@ -20,6 +20,8 @@ class operation():
         self.path = os.getcwd()
         self.start = self.username + '@' + \
         self.host + ':'+ self.path + '$' + ' '
+        self.conn_ssh()
+    def conn_ssh(self):
         try:
             self.s = pxssh.pxssh()
             self.hostn = '127.0.0.1'
@@ -29,8 +31,7 @@ class operation():
         except pxssh.ExceptionPxssh, e:
             print 'pxssh failed to login.'
             print str(e)
-        
-    def dirchange(self, dirn):
+    def dirchange(self, dirn = '/home/fangxu'):
         os.chdir(dirn) 
         self.host = hostname.hostname()
         self.username = os.getlogin()
@@ -44,6 +45,11 @@ class operation():
             print "yes it's cd"
             print comm[1]
             self.dirchange(comm[1])
+        if comm[0] == 'interrupt':
+            self.tcpcli.close()
+            self.s.close()
+            self.conn_ssh()
+            self.dirchange()
         try:
             self.s.sendline(command_from_client)
             self.s.prompt()
@@ -68,15 +74,13 @@ class operation():
                     command_from_cli = self.tcpcli.recv(BUFSIZE)
                     self.command_return(command_from_cli, self.tcpcli)
                 except Exception, ex:
+                    self.tcpcli.close()
+                    self.s.close()
                     print ex
+                    self.conn_ssh()
+                    self.dirchange()
                     break
 
-    def display(self):
-        while True:
-            input = raw_input(self.start)
-            if input == 'exit':
-                break
-            execute.command_return(input)
 
 test1 = operation()
 test1.conn_ser()
