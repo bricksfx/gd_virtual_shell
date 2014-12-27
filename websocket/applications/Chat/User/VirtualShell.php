@@ -112,8 +112,20 @@ class VirtualShell{
             return $new_message;
         }
         
-        socket_write($socket, $command, strlen($command));
         
+        if ($command != '!'){
+            socket_write($socket, $command, strlen($command));
+        } else {
+            //立即停止
+            socket_write($socket, '!', 1);
+            socket_close($socket);
+            $new_message[0] = 'shell';
+            $new_message[1] = 2;
+            $new_message[2] = 'Command Canceled';
+            return $new_message;
+        }
+        
+        //添加响应上限防止无限死循环
         $max_response = 30;
         $now_response = 0;
         while (1){
