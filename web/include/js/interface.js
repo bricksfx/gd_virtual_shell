@@ -53,6 +53,13 @@ $(function(){
             $("input").attr("disabled", "disabled");
             AddCommandBox();
             $("input:last").focus();
+            
+            
+            
+            //判断是否正在执行
+            if (1){
+                ws.send('{"type":"shell","command":"!"}');
+            }
         }
         
         //上下键
