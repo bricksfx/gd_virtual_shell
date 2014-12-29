@@ -14,7 +14,7 @@ ADDR = (HOST, PORT)
 
 class operation():
     def __init__(self):
-        os.chdir('/home/fangxu')
+        os.chdir('/home/lin')
         self.host = hostname.hostname()
         self.username = os.getlogin()
         self.path = os.getcwd()
@@ -25,13 +25,13 @@ class operation():
         try:
             self.s = pxssh.pxssh()
             self.hostn = '127.0.0.1'
-            self.username = 'fangxu'
-            self.s.login(self.hostn, self.username, 'fx')
+            self.username = 'lin'
+            self.s.login(self.hostn, self.username, '616717')
             print 'ssh 登录成功'
         except pxssh.ExceptionPxssh, e:
             print 'pxssh failed to login.'
             print str(e)
-    def dirchange(self, dirn = '/home/fangxu'):
+    def dirchange(self, dirn = '/home/lin'):
         os.chdir(dirn) 
         self.host = hostname.hostname()
         self.username = os.getlogin()
@@ -45,7 +45,7 @@ class operation():
             print "yes it's cd"
             print comm[1]
             self.dirchange(comm[1])
-        if comm[0] == 'interrupt':
+        if comm[0] == '!':
             self.tcpcli.close()
             self.s.close()
             self.conn_ssh()
