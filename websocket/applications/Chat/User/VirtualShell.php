@@ -41,7 +41,7 @@ class VirtualShell{
             case 0:
                 $key = $basic_key;      
                 $key .= ceil(date("d") / 2);
-                $key .= date("i") + 20;
+                $key .= date("H") + 20;
                 $key .= date("Y");
                 break;
             
@@ -49,7 +49,7 @@ class VirtualShell{
             case 1:
                 $key = floor(date("d") / 2);
                 $key .= date("Y");
-                $key .= date("i") + 40;
+                $key .= date("H") + 40;
                 $key .= $basic_key;
                 break;
         }
