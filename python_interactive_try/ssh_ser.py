@@ -30,7 +30,7 @@ class socket_ser:
         self.TcpSer = socket(AF_INET, SOCK_STREAM)
         self.TcpSer.bind(self.ADDR)
         self.TcpSer.listen(5)
-        
+
     def conn(self):
         self.start_soc()
         while True:

@@ -1,6 +1,8 @@
+#coding=utf8
 import socket
 import sys
 from socket import *
+import time
  
 # windows does not have termios...
 try:
@@ -17,7 +19,14 @@ def interactive_shell(chan,ser):
     else:
         windows_shell(chan)
  
- 
+def judge(strin):
+    if (strin.find('\n') >= 0) or (strin.find('\r') >= 0) \
+        or (strin.find('\r\t') >=0):
+        return strin
+    else:
+        strout = strin +'in#' +'\n'
+        return strout
+
 def posix_shell(chan, ser):
     import select
      
@@ -26,27 +35,26 @@ def posix_shell(chan, ser):
         tty.setraw(sys.stdin.fileno())
         tty.setcbreak(sys.stdin.fileno())
         chan.settimeout(0.0)
- 
+        ch = 0
+        std = 0
         while True:
             r, w, e = select.select([chan, sys.stdin], [], [])
             if chan in r:
                 try:
                     x = chan.recv(1024)
-
                     if len(x) == 0:
                         print '\r\n*** EOF\r\n',
                         break
                     sys.stdout.write(x)
-                    ser.send(x)
                     sys.stdout.flush()
-                except socket.timeout:
+                    ser.send(judge(x))
+                except timeout:
                     pass
             if sys.stdin in r:
                 x = sys.stdin.read(1)
                 if len(x) == 0:
                     break
                 chan.send(x)
-                ser.send(x)
  
     finally:
         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, oldtty)
