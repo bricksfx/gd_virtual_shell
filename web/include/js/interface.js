@@ -52,8 +52,7 @@ $(function(){
         if (e.ctrlKey && e.which == 67){
             $("input").attr("disabled", "disabled");
             AddCommandBox();
-            $("input:last").focus();
-            
+            $("input:last").focus();           
             
             
             //判断是否正在执行
