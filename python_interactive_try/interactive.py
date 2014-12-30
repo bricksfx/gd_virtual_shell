@@ -20,12 +20,13 @@ def interactive_shell(chan,ser):
         windows_shell(chan)
  
 def judge(strin):
-    if (strin.find('\n') >= 0) or (strin.find('\r') >= 0) \
-        or (strin.find('\r\t') >=0):
-        return strin
-    else:
+    if (strin.find('@') >=0):
         strout = strin +'in#' +'\n'
         return strout
+    elif (strin.find('[sudo] password for') >= 0):
+        strout = strin + 'in#' + '\n'
+        return strout
+    return strin
 
 def posix_shell(chan, ser):
     import select
@@ -38,7 +39,7 @@ def posix_shell(chan, ser):
         ch = 0
         std = 0
         while True:
-            r, w, e = select.select([chan, sys.stdin], [], [])
+            r, w, e = select.select([chan,ser], [], [])
             if chan in r:
                 try:
                     x = chan.recv(1024)
@@ -50,12 +51,17 @@ def posix_shell(chan, ser):
                     ser.send(judge(x))
                 except timeout:
                     pass
-            if sys.stdin in r:
-                x = sys.stdin.read(1)
-                if len(x) == 0:
-                    break
-                chan.send(x)
- 
+
+            if ser in r:
+                try:
+                    x = ser.recv(1024)
+                    if len(x) != 0:
+                        chan.send(x)
+                    elif len(x) == 0:
+                        break
+                except timeout:
+                        pass
+
     finally:
         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, oldtty)
  

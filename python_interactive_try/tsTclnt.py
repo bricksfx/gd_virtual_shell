@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#coding=utf8
 from socket import *
 import time
 import sys
@@ -20,15 +21,14 @@ while True:
         print 'start successful'
     while True:
         data = tcpCliSock.recv(Bufsiz)
-        time.sleep(0.1) 
         if data.find('in#') >= 0:
-            data1 = data.replace('\n', '')
-            data2 = data1.replace('in#', '')
-            sys.stdout.flush()
-            print data2, 
+            data = data.replace('in#\n', '')
+            print data,
             command_input = raw_input()
+            command_input += '\n'
             tcpCliSock.send(command_input)
         else:
             print data,
+            time.sleep(0.1)
 tcpCliSock.close()
 
