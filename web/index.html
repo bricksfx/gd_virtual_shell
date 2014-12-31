@@ -120,6 +120,16 @@
                 } else {
                     AddMessageBox(result[2]);
                 }
+                break;
+                
+            case "say":
+                if (result[1] != $.LS.get("user_name")){
+                    AddMessageBox(result[3] + "-" + result[1] + " 说： " + result[2]);
+                } else {
+                    AddAnyCommandBox("say:", "UserSay");
+                }
+                
+                break;                
         }
 
     };
