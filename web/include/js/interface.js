@@ -29,10 +29,7 @@ $(function(){
                     command_array[now_command] = $("input:last").val();
                 }
                 
-                $.LS.set("command_stack", JSON.stringify(command_array));
-                
-                //发送命令
-                ws.send('{"type":"shell","command":"' + $("input:last").val() + '"}');
+                $.LS.set("command_stack", JSON.stringify(command_array));               
                 
             }
             
@@ -41,7 +38,10 @@ $(function(){
                 eval($("input:last").attr("func") + '()');
             } else {                
                 //匹配VirtualShell指令集
-                ShellCommand($("input:last").val());            
+                if (!ShellCommand($("input:last").val())){
+                    //发送命令
+                    ws.send('{"type":"shell","command":"' + $("input:last").val() + '"}');
+                }
             }
             
             $("input:last").focus();

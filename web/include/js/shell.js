@@ -118,7 +118,8 @@ function ShellCommand(command) {
                     break;
 
                     //和其他管理员对话
-                case "message":
+                case "say":
+                    AddAnyCommandBox("say:", "UserSay");
                     break;
 
                     //清除操作历史记录
@@ -133,7 +134,12 @@ function ShellCommand(command) {
                     break;
             }
             break;
+        default:
+            //非命令集，发送到服务器
+            return 0;
+            break;
     }
+    return 1;
 }
 
 //获取历史命令
@@ -179,6 +185,19 @@ function UserPassword(){
     } else {
         AddMessageBox("Undefined User Name", "red");
         AddMessageBox("Access Deined", "red");
+        AddAnyCommandBox("Login:", "UserName");
+        $("input:last").focus();
+        return ;
+    }
+}
+
+//用户交流
+function UserSay(){
+    if (undefined != $.LS.get("user_name") && logined){
+        user_name = $.LS.get("user_name");
+        ws.send('{"type":"say","name":"' + user_name + '","group":"VirtualShell","content":"' + $("input:last").val() + '"}');
+    } else {
+        AddMessageBox("Please Login First", "red");
         AddAnyCommandBox("Login:", "UserName");
         $("input:last").focus();
         return ;

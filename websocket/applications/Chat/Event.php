@@ -161,29 +161,35 @@ class Event
             // 用户发言 message: {type:say, to_uid:xx, content:xx}
             case 'say':
                 // 私聊
-                if($message_data['to_uid'] != 'all')
-                {
-                    $new_message = array(
-                        'type'=>'say',
-                        'from_uid'=>$uid, 
-                        'to_uid'=>$message_data['to_uid'],
-                        'content'=>nl2br(htmlspecialchars($message_data['content'])),
-                        'time'=>date('Y-m-d :i:s')
-                    );
-                    return Gateway::sendToUid($message_data['to_uid'], WebSocket::encode(json_encode($new_message)));
-                }
+//                if($message_data['to_uid'] != 'all')
+//                {
+//                    $new_message = array(
+//                        'type'=>'say',
+//                        'from_uid'=>$uid, 
+//                        'to_uid'=>$message_data['to_uid'],
+//                        'content'=>nl2br(htmlspecialchars($message_data['content'])),
+//                        'time'=>date('Y-m-d :i:s')
+//                    );
+//                    return Gateway::sendToUid($message_data['to_uid'], WebSocket::encode(json_encode($new_message)));
+//                }
                 // 向大家说
                
                 $new_message = array(
-                    'type'=>'say', 
-                    'from_uid'=>$uid,
-                    'to_uid'=>'all',
-                    'content'=>nl2br(htmlspecialchars($message_data['content'])),
-                    'time'=>date('Y-m-d :i:s'),
+                    '0'=>'say', 
+                    '1'=> htmlspecialchars($message_data['name']),
+                    '2'=>nl2br(htmlspecialchars($message_data['content'])),
+                    '3'=>date('Y-m-d H:i:s'),
                 );
+                $new_message_encode = json_encode($new_message);
                 
-                
-                return Gateway::sendToAll(WebSocket::encode(json_encode($new_message)));
+                foreach (self::getGroupUserList() as $key => $value){                    
+                    if ($key == $message_data['group']){
+                        foreach ($value as $uid => $user_id){
+                            Gateway::sendToUid($uid, WebSocket::encode($new_message_encode));
+                        }                        
+                    }   
+                }
+                return TRUE;
                 
             case 'func':
                 $url = $message_data['api'];
