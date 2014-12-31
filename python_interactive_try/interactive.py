@@ -18,15 +18,6 @@ def interactive_shell(chan,ser):
         posix_shell(chan, ser)
     else:
         windows_shell(chan)
- 
-def judge(strin):
-    if (strin.find('@') >=0):
-        strout = strin +'in#' +'\n'
-        return strout
-    elif (strin.find('[sudo] password for') >= 0):
-        strout = strin + 'in#' + '\n'
-        return strout
-    return strin
 
 def posix_shell(chan, ser):
     import select
@@ -48,7 +39,7 @@ def posix_shell(chan, ser):
                         break
                     sys.stdout.write(x)
                     sys.stdout.flush()
-                    ser.send(judge(x))
+                    ser.send(x)
                 except timeout:
                     pass
 

@@ -22,7 +22,7 @@ class ssh_conn:
         self.ssh.close()
 
 class socket_ser:
-    HOST = 'localhost'
+    HOST = '10.16.1.219'
     PORT = 10086
     ADDR = (HOST, PORT)
     BUFSIZE = 1024
@@ -55,20 +55,8 @@ class socket_ser:
                 self.tcpcli.close()
 
 def main():
-    '''
-    ssh = ssh_conn()
-    try:
-        ssh.conn()
-        ssh.interactive_shell()
-    except Exception, ex:
-        print ex
-    finally:
-        ssh.close()
-    '''
     sock = socket_ser()
     sock.conn()
-    
-
 
 if __name__ == '__main__':
      main()
