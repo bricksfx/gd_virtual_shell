@@ -87,7 +87,16 @@ function ShellCommand(command) {
 
                     //显示VirtualShell指令集
                 case "help":
-                    AddTickerMessageBox("Welcome to use Virtual Shell", "red");
+                    AddMessageBox("Welcome to use Virtual Shell", "red");
+                    AddMessageBox("$vs:clear - Clean the screen");                    
+                    AddMessageBox("$vs:login - Login the server");
+                    AddMessageBox("$vs:say - Interactive with other users");
+                    AddMessageBox("$vs:clean_history - Clean the command history");
+                    AddMessageBox("$vs:github - Visit the project source code in Github");
+                    AddMessageBox("$vs:author - Show the authors of the Virtual Shell");
+                    AddMessageBox("$vs:bye - Shutdown the Virtual Shell");                   
+                    
+                    AddCommandBox();
                     break;
 
                     //显示作者信息
