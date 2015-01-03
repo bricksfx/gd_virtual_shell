@@ -87,7 +87,16 @@ function ShellCommand(command) {
 
                     //显示VirtualShell指令集
                 case "help":
-                    AddTickerMessageBox("Welcome to use Virtual Shell", "red");
+                    AddMessageBox("Welcome to use Virtual Shell", "red");
+                    AddMessageBox("$vs:clear - Clean the screen");                    
+                    AddMessageBox("$vs:login - Login the server");
+                    AddMessageBox("$vs:say - Interactive with other users");
+                    AddMessageBox("$vs:clean_history - Clean the command history");
+                    AddMessageBox("$vs:github - Visit the project source code in Github");
+                    AddMessageBox("$vs:author - Show the authors of the Virtual Shell");
+                    AddMessageBox("$vs:bye - Shutdown the Virtual Shell");                   
+                    
+                    AddCommandBox();
                     break;
 
                     //显示作者信息
@@ -118,7 +127,8 @@ function ShellCommand(command) {
                     break;
 
                     //和其他管理员对话
-                case "message":
+                case "say":
+                    AddAnyCommandBox("say:", "UserSay");
                     break;
 
                     //清除操作历史记录
@@ -133,7 +143,12 @@ function ShellCommand(command) {
                     break;
             }
             break;
+        default:
+            //非命令集，发送到服务器
+            return 0;
+            break;
     }
+    return 1;
 }
 
 //获取历史命令
@@ -179,6 +194,19 @@ function UserPassword(){
     } else {
         AddMessageBox("Undefined User Name", "red");
         AddMessageBox("Access Deined", "red");
+        AddAnyCommandBox("Login:", "UserName");
+        $("input:last").focus();
+        return ;
+    }
+}
+
+//用户交流
+function UserSay(){
+    if (undefined != $.LS.get("user_name") && logined){
+        user_name = $.LS.get("user_name");
+        ws.send('{"type":"say","name":"' + user_name + '","group":"VirtualShell","content":"' + $("input:last").val() + '"}');
+    } else {
+        AddMessageBox("Please Login First", "red");
         AddAnyCommandBox("Login:", "UserName");
         $("input:last").focus();
         return ;
